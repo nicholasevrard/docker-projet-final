@@ -1,19 +1,22 @@
 version: '3.1'
 
 services:
-
   wordpress:
-    image: wordpress
+    image: wordpress:latest
+    build:
+      context: .
     restart: always
     ports:
-      - 8080:80
+      - 8096:80
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: exampleuser
       WORDPRESS_DB_PASSWORD: examplepass
       WORDPRESS_DB_NAME: exampledb
     volumes:
-      - wordpress:/var/www/html
+      - ./plugins:/var/www/html/wp-content/plugins
+      - ./themes:/var/www/html/wp-content/themes
+      - ./config/wp-config.php:/var/www/html/wp-config.php
 
   db:
     image: mysql:8.0
@@ -27,6 +30,4 @@ services:
       - db:/var/lib/mysql
 
 volumes:
-  wordpress:
   db:
-

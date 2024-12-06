@@ -1,26 +1,20 @@
-# Start from the official WordPress image
+# Use the official WordPress image as the base
 FROM wordpress:latest
 
-# Set environment variables
-ENV WORDPRESS_DB_HOST=db
-ENV WORDPRESS_DB_USER=exampleuser
-ENV WORDPRESS_DB_PASSWORD=examplepass
-ENV WORDPRESS_DB_NAME=exampledb
+# Set working directory
+WORKDIR /var/www/html
 
-# Copy custom plugins, themes, or configurations (optional)
-# Assuming you have a folder structure like:
-# ./plugins/
-# ./themes/
-# ./config/
-COPY plugins/ /var/www/html/wp-content/plugins/
-COPY themes/ /var/www/html/wp-content/themes/
-COPY config/wp-config.php /var/www/html/wp-config.php
+# Copy custom plugins
+COPY plugins/ wp-content/plugins/
 
-# Set permissions (if needed)
-RUN chown -R www-data:www-data /var/www/html/wp-content
+# Copy custom themes
+COPY themes/ wp-content/themes/
 
-# Expose port 80 (default for WordPress)
+# Copy custom wp-config.php
+COPY config/wp-config.php .
+
+# Set permissions (optional, only if required)
+# RUN chown -R www-data:www-data wp-content
+
+# Expose the web server port (default is 80)
 EXPOSE 80
-
-# Run the default WordPress entrypoint
-CMD ["apache2-foreground"]
